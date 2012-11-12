@@ -1,0 +1,114 @@
+SmsCustomerOrganization:
+  actAs: { Timestampable: ~ }
+  columns:
+    customer_id :                                { type: string(255), notnull: true, unique: true }
+    customer_organization_tin_number:            { type: string(255), notnull: true }
+    customer_oraganization_name:                 { type: string(255), notnull: true }
+    customer_oraganization_acronym:              { type: string(255), notnull: true }
+    customer_oraganization_head_office_name:     { type: string(255), notnull: true }
+    customer_oraganization_head_office_phone:    { type: string(255), notnull: true }
+    customer_oraganization_chief_executive_name: { type: string(255), notnull: true }
+    customer_oraganization_contact_person:       { type: string(255), notnull: true }
+    customer_oraganization_designation:          { type: string(255), notnull: false }
+    customer_oraganization_place:                { type: string(255), notnull: false}
+    customer_oraganization_email:                { type: string(255), notnull: false }
+    customer_oraganization_phone_number:         { type: string(255), notnull: true }
+    customer_oraganization_fax:                  { type: string(255), notnull: false }
+    customer_oraganization_web_site:             { type: string(255), notnull: false }
+    customer_oraganization_global_head_count:    { type: string(255), notnull: false }
+    customer_oraganization_local_head_count:     { type: string(255), notnull: false }
+    customer_oraganization_founded_date:         { type: date }
+    ownership:                                   { type: string(255), notnull: true }
+
+SmsItem:
+  actAs: { Timestampable: ~ }
+  columns:
+    item_name:           { type: string(255) }
+    group_id:         { type: integer, notnull: true }
+    family_id:         { type: integer, notnull: true }
+    item_code:           { type: string(255), notnull: true, unique: true }
+    item_type:           { type: string(255) }
+    item_quantity:       { type: integer, notnull: true }
+    item_measuring_unit: { type: string(255), notnull: true }
+    item_description:    { type: string(4000), notnull: true }
+    item_store_id:       { type: string(255), notnull: true, unique: true }
+  relations:
+    SmsFamily:               { onDelete: CASCADE, local: family_id, foreign: id }
+    SmsGroup:               { onDelete: CASCADE, local: group_id, foreign: id }
+
+SmsFamily:
+  actAs: { Timestampable: ~ }
+  columns:
+    family_name:           { type: string(255) }
+    family_code:           { type: string(255) }
+    description:           { type: string(255) }
+
+SmsGroup:
+  actAs: { Timestampable: ~ }
+  columns:
+    group_name:           { type: string(255) }
+    group_code:           { type: string(255) }
+    description:           { type: string(255) }
+
+SmsStockReciept:
+  actAs: { Timestampable: ~ }
+  columns:
+    recived_number:        { type: string(250), notnull: true,unique:true } 
+    item_id:               { type: integer, notnull: true }
+    rf_id:                 { type: string(255), notnull: false }
+    cust_id:               { type: string(255), notnull: true }
+    reciever_stockeper_id: { type: string(255), notnull: true }
+    quantity:              { type: integer, notnull: true }
+    unite_price:           { type: float, notnull: true }
+    total_price:           { type: float, notnull: true }
+    description:           { type: string(400) }
+  relations:
+    SmsItem:               { onUpdate: CASCADE, local: item_id, foreign: id }
+
+SmsIssue:
+  actAs: { Timestampable: ~ }
+  columns:
+    exit_number:              { type: string(255), notnull: true }
+    issue_type:               { type: string(255), notnull: true }
+    item_id:                  { type: integer, notnull: true } 
+    reciept_referrence_id:    { type: integer, notnull: true }
+    serial_number:            { type: string(255), notnull: true }
+    storekeeper_id:           { type: string(255), notnull: true }
+    borrower_id:              { type: string(255), notnull: true }
+    quantity:                 { type: string(255), notnull: true }
+    description:              { type: string(1000) }
+  relations:
+    SmsItem:                  { onUpdate: CASCADE, local: item_id, foreign: id } 
+    SmsStockReciept:          { onUpdate: CASCADE, local: reciept_referrence_id, foreign: id } 
+    
+SmsReturn:
+  actAs: { Timestampable: ~ }
+  columns:
+    return_type:     { type: string(255), notnull: true }
+    exit_id:         { type: integer, notnull: true }
+    item_id:                  { type: integer, notnull: true } 
+    return_number:   { type: string(255), notnull: true }
+    employee_id:     { type: string(255), notnull: true }
+    store_keeper_id: { type: string(255), notnull: true }
+    quantity:        { type: integer, notnull: true }
+    description:     { type: string(4000), notnull: true }
+  relations:
+    SmsIssue: { onDelete: CASCADE, local: exit_id, foreign: id } 
+
+SmsRequest:
+  actAs: { Timestampable: ~ }
+  columns:
+    requested_by:     { type: string(255), notnull: true }
+    email:     { type: string(255), notnull: true }
+    requested_item:   { type: string(255), notnull: true }
+    requested_quantity:   { type: integer, notnull: true }
+    description: { type: string(4000), notnull: true }
+    request_status:     { type: string(250), notnull: true, default:not-viewed }
+    given_quantity:    { type: integer, notnull: true, default:0 }
+ 
+ 
+    
+  
+ 
+ 
+ 
